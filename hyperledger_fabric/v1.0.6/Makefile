@@ -35,7 +35,7 @@ test:
 	make stop clean
 
 ready: # create/join channel, install/instantiate cc
-	#make stop
+	make stop
 	make gen_config  # Will ignore if local config path exists
 	make start
 

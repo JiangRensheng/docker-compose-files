@@ -35,7 +35,7 @@ test:
 	make stop clean
 
 ready: # create/join channel, install/instantiate cc
-	make stop
+	#make stop
 	make gen_config  # Will ignore if local config path exists
 	make start
 
@@ -79,7 +79,7 @@ start: # bootup the fabric network
 
 stop: # stop the fabric network
 	@echo "Stop the fabric network with ${COMPOSE_FILE}..."
-	@docker-compose -f ${COMPOSE_FILE} down >& /tmp/docker-compose.log  # Stop a fabric network
+	@docker-compose -f ${COMPOSE_FILE} down >&1 > /tmp/docker-compose.log  # Stop a fabric network
 
 chaincode_dev: restart chaincode_init test_cc_peer0 stop
 
@@ -192,9 +192,9 @@ logs_check: logs_save logs_view
 
 logs_save: # save logs
 	[ -d $(LOG_PATH) ] || mkdir -p $(LOG_PATH)
-	docker logs peer0.org1.example.com >& $(LOG_PATH)/dev_peer0.log
-	docker logs orderer.example.com >& $(LOG_PATH)/dev_orderer.log
-	docker-compose -f ${COMPOSE_FILE} logs >& $(LOG_PATH)/dev_all.log
+	docker logs peer0.org1.example.com >&1 > $(LOG_PATH)/dev_peer0.log
+	docker logs orderer.example.com >&1 > $(LOG_PATH)/dev_orderer.log
+	docker-compose -f ${COMPOSE_FILE} logs >&1 > $(LOG_PATH)/dev_all.log
 
 logs_view: # view logs
 	less $(LOG_PATH)/dev_peer.log
